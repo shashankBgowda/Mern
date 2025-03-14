@@ -3,8 +3,10 @@ import { PORT , mongoDBURL } from "./config.js";
 import mongoose from 'mongoose';
 import { Book } from "./models/bookmodel.js";
 import bookroute from "./routes/bookroutes.js";
+import cors from "cors";
 
 const app = express();
+
 //Middleware to parsing request body
 app.use(express.json());
 
@@ -13,7 +15,13 @@ app.get('/',(request, response)=>{
     return response.status(234).send("welcome brun..!")
 });
 
-app.use('/books', bookroute); 
+app.use('/books', bookroute);//it is also a middleware
+app.use(cors({
+    origin : "http://localhost:3000",
+    methods : ['GET','PUT','POST','DELETE'],
+    allowedHeader : ['content-type']
+}
+));
 
 mongoose
     .connect(mongoDBURL)
